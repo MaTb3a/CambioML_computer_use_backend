@@ -39,3 +39,7 @@ ENV/
 
 # Logs
 *.log
+
+# Node.js
+node_modules/
+computer-use-demo/node_modules/
