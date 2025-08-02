@@ -1,0 +1,22 @@
+version: '3.9'
+services:
+  backend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ..:/app
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+  computer:
+    image: ghcr.io/anthropics/anthropic-quickstarts:computer-use-demo-latest
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+    ports:
+      - "5900:5900"
+      - "6080:6080"
+      - "8080:8080"
+    volumes:
+      - ${HOME}/.anthropic:/home/computeruse/.anthropic

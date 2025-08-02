@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Computer Use Demo</title>
+</head>
+<body>
+  <button id="new-session">New Session</button>
+  <div id="session-info"></div>
+  <textarea id="prompt" rows="4" cols="50" placeholder="Enter a message"></textarea>
+  <button id="send">Send</button>
+  <ul id="messages"></ul>
+  <iframe id="vnc" width="600" height="400"></iframe>
+  <script>
+    let sessionId;
+    document.getElementById('new-session').onclick = async () => {
+      const res = await fetch('/sessions', {method: 'POST'});
+      const data = await res.json();
+      sessionId = data.id;
+      document.getElementById('session-info').textContent = `Session ${sessionId}`;
+      const vncRes = await fetch(`/sessions/${sessionId}/vnc`);
+      const vncData = await vncRes.json();
+      document.getElementById('vnc').src = vncData.url;
+      const evt = new EventSource(`/sessions/${sessionId}/stream`);
+      evt.onmessage = (e) => {
+        const li = document.createElement('li');
+        li.textContent = e.data;
+        document.getElementById('messages').appendChild(li);
+      };
+    };
+    document.getElementById('send').onclick = async () => {
+      if (!sessionId) return;
+      const content = document.getElementById('prompt').value;
+      await fetch(`/sessions/${sessionId}/messages`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({content, type: 'user'})
+      });
+    };
+  </script>
+</body>
+</html>

@@ -6,6 +6,6 @@ functionality.
 
 
 def get_vnc_url(session_id: int) -> str:
-    """Return a pseudo URL for a VNC connection."""
-    return f"vnc://localhost/{session_id}"
+    """Return a demo URL for a VNC connection."""
+    return "http://localhost:6080/vnc.html"
 

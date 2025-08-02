@@ -1,5 +1,10 @@
 from fastapi import APIRouter
-from .routes import router as api_router
+from .routes import router as routes_router
+from .websockets import router as websocket_router
+
+api_router = APIRouter()
+api_router.include_router(routes_router)
+api_router.include_router(websocket_router)
 
 __all__ = ["api_router", "APIRouter"]
 
