@@ -20,6 +20,14 @@ This will start the API server on `http://localhost:8000`.
 - `GET /sessions` – list all sessions.
 - `POST /sessions/{session_id}/messages` – add a message to a session.
 - `GET /sessions/{session_id}/messages` – retrieve all messages for a session.
+- `GET /sessions/{session_id}/vnc` – obtain a VNC URL for the session.
 
 The project also includes a simple WebSocket echo endpoint at `/ws`.
+
+## Using with Anthropic Quickstarts
+
+This backend can be paired with the [Anthropic Quickstarts Computer Use Demo](https://github.com/anthropics/anthropic-quickstarts/tree/main/computer-use-demo).
+Run this API server and then start the quickstart front end. The front end will
+communicate with the endpoints above and use `/sessions/{id}/vnc` to retrieve
+the VNC connection URL.
 

@@ -6,6 +6,7 @@ from app.db import models
 from app.db.database import get_db
 from app.schemas.message import Message, MessageCreate
 from app.schemas.session import Session as SessionSchema
+from app.services.vnc_service import get_vnc_url
 
 router = APIRouter()
 
@@ -44,4 +45,13 @@ def get_messages(session_id: int, db: Session = Depends(get_db)):
     if session is None:
         raise HTTPException(status_code=404, detail="Session not found")
     return session.messages
+
+
+@router.get("/sessions/{session_id}/vnc")
+def get_vnc(session_id: int, db: Session = Depends(get_db)):
+    """Return a VNC connection URL for the given session."""
+    session = db.query(models.Session).filter(models.Session.id == session_id).first()
+    if session is None:
+        raise HTTPException(status_code=404, detail="Session not found")
+    return {"url": get_vnc_url(session_id)}
 
